@@ -1,0 +1,133 @@
+@todo-width: 440px;
+
+body {
+  background: #eee;
+  font-family: helvetica, sans;
+  color: #555;
+} 
+
+h1 {
+  text-align: center;
+  padding: 10px 0 20px;
+  color: #666;
+  text-shadow: 0 1px 2px #889;
+}
+
+h1, h2 {
+  margin: 0;
+  font-weight: normal;
+}
+
+.todos {
+  background: #fff;
+  width: @todo-width;
+  margin: 0 auto;
+  padding: 5px 10px 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-shadow: 0 5px 30px #ccc;
+}
+
+.info {
+  display: none;
+}
+
+.todoform {
+  position: relative;
+  height: 30px;
+  top: 2px;
+}
+
+a {
+  font-size: 13px;
+  color: #069;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+a.delete {
+  color: #f00;
+  display: block;
+  line-height: 27px;
+  font-family: arial;
+  font-weight: bold;
+  font-size: 18px;
+  float:right;
+  padding: 0 8px;
+  display: none;
+  opacity: 0.5;
+  &:hover {
+    opacity: 1;
+    text-decoration: none;
+  }
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  li {
+    display: block;
+    margin: 0;
+    padding: 4px 0;
+    font-size: 16px;
+    line-height: 28px;
+    background: #fff;
+    border-bottom: 1px dotted #ccc;
+    &:last-child {
+      border-bottom: 0;
+    }
+    & input[type=text] {
+      font-family: helvetica, sans;
+      font-size: 16px;
+      margin: 0;
+      padding: 4px 0;
+      border: 0;
+      width: @todo-width - 50;
+    }
+    &:hover .delete{
+      display: inline-block;
+    }
+  }
+}
+
+form label, form dl, form dt, form dd {
+  margin: 0;
+  display: block;
+}
+
+form input {
+  &[type=text] {
+    border-radius: 3px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    padding: 4px;
+    width: @todo-width - 42;
+  }
+  &[type=submit] {
+    color: #666;
+    font-size: 20px;
+    width: 27px;
+    height: 27px;
+    border: 1px solid #ccc;
+    background: #ddd;
+    padding: 0;
+    margin: 0;
+    border-radius: 3px;
+    position: absolute;
+    top: 2px;
+    right: 0;
+  }
+}
+
+input:focus {
+  outline: none;
+}
+
+.credits {
+  font-size: 12px;
+  text-align: center;
+  padding: 10px 0;
+}

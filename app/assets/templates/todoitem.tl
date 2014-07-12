@@ -1,0 +1,1 @@
+<span class="edit">{content}</span> <a href="#" class="delete">X</a>
