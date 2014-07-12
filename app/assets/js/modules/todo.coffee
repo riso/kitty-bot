@@ -1,4 +1,4 @@
-define ["app", "jquery", "underscore", "backbone", "../../templates/todoitem"], (app, $, _, Backbone) ->
+define ["app", "jquery", "underscore", "backbone"], (app, $, _, Backbone) ->
 
 
   answers = ["meow!", "purr", "meow meow"]
@@ -24,9 +24,8 @@ define ["app", "jquery", "underscore", "backbone", "../../templates/todoitem"], 
       @model.bind "remove", @unrender
     render: ->
       that = @
-      dust.render "templates/todoitem", @model.toJSON(), (err, out) ->
-        that.$el.html(if err then err else out).data "item-id", that.model.toJSON().id
-        $(".edit", that.$el).editInPlace context: that, onChange: that.editTodo
+      that.$el.html("<span class=\"edit\">#{@model.toJSON().content}</span> <a href=\"#\" class=\"delete\">X</a>")
+      $(".edit", that.$el).editInPlace context: that, onChange: that.editTodo
       @
     remove: -> @model.destroy()
     unrender: -> @$el.remove()
