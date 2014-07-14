@@ -24,7 +24,7 @@ define ["app", "jquery", "underscore", "backbone"], (app, $, _, Backbone) ->
       @model.bind "remove", @unrender
     render: ->
       that = @
-      that.$el.html("<span class=\"edit\">#{@model.toJSON().content}</span> <a href=\"#\" class=\"delete\">X</a>")
+      that.$el.html("<span class=\"edit\">#{@model.toJSON().content}</span> <a href=\"#\" class=\"delete\">X</a>").data "item-id", that.model.toJSON().id
       $(".edit", that.$el).editInPlace context: that, onChange: that.editTodo
       @
     remove: -> @model.destroy()
