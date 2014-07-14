@@ -13,11 +13,6 @@ object Global extends GlobalSettings {
     def insert() = {
       DB.withSession { implicit s:Session =>
         println(s)
-        if (Todos.count == 0) {
-          Seq(
-            Todo(None, "Hello todos.")
-          ).foreach(Todos.create)
-        }
       }
     }
   }
