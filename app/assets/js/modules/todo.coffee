@@ -5,10 +5,18 @@ define ["app", "jquery", "underscore", "backbone"], (app, $, _, Backbone) ->
   
   getRandomInt = (min, max) -> Math.floor(Math.random() * (max - min)) + min
   
-  generateAnswer = -> answers[getRandomInt(0, answers.length)]
+  generateAnswer = -> 
+    r = answers.length + 1 
+    if r is answers.length + 1
+      catfact = new app.Models.CatFactModel().fetch() success: @render
+      console.log catfact
+    answers[r]
 
   class app.Models.TodoModel extends Backbone.Model
     urlRoot: "/todos"
+
+  class app.Models.AnswerModel extends Backbone.Model
+    url: "/answer"
 
   class app.Collections.TodoCollection extends Backbone.Collection
     model: app.Models.TodoModel
@@ -56,13 +64,15 @@ define ["app", "jquery", "underscore", "backbone"], (app, $, _, Backbone) ->
           console.log model, response, options
           that.collection.add model
           $(".todolist ul", that.$el).append new app.Views.TodoItemView(model: model).render().el
-          todo = new app.Models.TodoModel content: "Kittybot answers: #{generateAnswer()}"
-          todo.save todo.toJSON(),
-            success: (model, response, options) ->
-              console.log model, response, options
-              that.collection.add model
-              $("#content", ".todoform").val("").blur()
-              $(".todolist ul", that.$el).append new app.Views.TodoItemView(model: model).render().el
+          answer = new app.Models.AnswerModel()
+          answer.fetch success: (model, response, options) ->
+            todo = new app.Models.TodoModel content: "Kittybot answers: #{answer.toJSON().content}"
+            todo.save todo.toJSON(),
+              success: (model, response, options) ->
+                console.log model, response, options
+                that.collection.add model
+                $("#content", ".todoform").val("").blur()
+                $(".todolist ul", that.$el).append new app.Views.TodoItemView(model: model).render().el
     deleteTodo: (event) ->
       event.preventDefault()
       todo = @collection.get $(event.target).closest("li").data("item-id")

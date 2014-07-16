@@ -17,6 +17,8 @@ libraryDependencies ++= Seq(
   "postgresql" % "postgresql" % "9.1-901-1.jdbc4"
 )
 
+libraryDependencies += filters
+
 includeFilter in (Assets, LessKeys.less) := "main.less"
 
 excludeFilter in (Assets, LessKeys.less) := "_*.less"

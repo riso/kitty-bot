@@ -3,7 +3,7 @@
 
 # --- !Ups
 
-create table "TODO" ("id" SERIAL PRIMARY KEY,"content" TEXT NOT NULL);
+create table "TODO" ("id" SERIAL NOT NULL PRIMARY KEY,"content" TEXT NOT NULL);
 
 # --- !Downs
 

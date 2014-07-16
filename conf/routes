@@ -12,5 +12,8 @@ PUT     /todos/:id                  controllers.TodoController.updateTodo(id:Lon
 POST    /todos                      controllers.TodoController.createTodo
 DELETE  /todos/:id                  controllers.TodoController.deleteTodo(id:Long)
 
+# CatFacts
+GET     /answer						controllers.AnswerController.index
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
