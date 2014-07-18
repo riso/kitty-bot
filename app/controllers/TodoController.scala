@@ -19,8 +19,8 @@ object TodoController extends Controller {
     )(Todo.apply)(Todo.unapply)
   )
 
-  def index = DBAction { implicit rs =>
-    Ok(Json.toJson(Todos.all()))
+  def index(page: Int) = DBAction { implicit rs =>
+    Ok(Json.toJson(Todos.all(offset = 10 * page)))
   }
 
   def todoList(id: Long) = DBAction { implicit rs =>

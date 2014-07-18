@@ -1,16 +1,7 @@
 define ["app", "jquery", "underscore", "backbone"], (app, $, _, Backbone) ->
 
-
-  answers = ["meow!", "purr", "meow meow"]
-  
-  getRandomInt = (min, max) -> Math.floor(Math.random() * (max - min)) + min
-  
-  generateAnswer = -> 
-    r = answers.length + 1 
-    if r is answers.length + 1
-      catfact = new app.Models.CatFactModel().fetch() success: @render
-      console.log catfact
-    answers[r]
+  $(window).scroll ->
+    $('.todos').trigger "bottom" if $('body').height() <= ($(window).height() + $(window).scrollTop())
 
   class app.Models.TodoModel extends Backbone.Model
     urlRoot: "/todos"
@@ -22,7 +13,8 @@ define ["app", "jquery", "underscore", "backbone"], (app, $, _, Backbone) ->
     model: app.Models.TodoModel
     url: "/todos"
     comparator: (todo) ->
-      todo.get("id")
+      - todo.get("id")
+    page: 1
 
   class app.Views.TodoItemView extends Backbone.View
     tagName: "li"
@@ -44,6 +36,8 @@ define ["app", "jquery", "underscore", "backbone"], (app, $, _, Backbone) ->
     events:
       "submit .todoform" : "addTodo"
       "click a.delete" : "deleteTodo"
+      "click a#loadmore" : "loadMoreTodos"
+      "bottom" : "loadMoreTodos"
     initialize: ->
       _.bindAll.apply _, [@].concat(_.functions(@))
       @collection = new app.Collections.TodoCollection
@@ -54,6 +48,7 @@ define ["app", "jquery", "underscore", "backbone"], (app, $, _, Backbone) ->
         do (model) =>
           $(".todolist ul", @el).append new app.Views.TodoItemView(model: model).render().el
       @
+      $(".todolist ul", @el).append "<li><a href=\"#\" id=\"loadmore\">Load more</a></li>"
     addTodo: (event) ->
       event.preventDefault()
       return if $.trim($("#content", event.target).val()) is ""
@@ -63,7 +58,7 @@ define ["app", "jquery", "underscore", "backbone"], (app, $, _, Backbone) ->
         success: (model, response, options) ->
           console.log model, response, options
           that.collection.add model
-          $(".todolist ul", that.$el).append new app.Views.TodoItemView(model: model).render().el
+          $(".todolist ul", that.$el).prepend new app.Views.TodoItemView(model: model).render().el
           answer = new app.Models.AnswerModel()
           answer.fetch success: (model, response, options) ->
             todo = new app.Models.TodoModel content: "Kittybot answers: #{answer.toJSON().content}"
@@ -72,8 +67,18 @@ define ["app", "jquery", "underscore", "backbone"], (app, $, _, Backbone) ->
                 console.log model, response, options
                 that.collection.add model
                 $("#content", ".todoform").val("").blur()
-                $(".todolist ul", that.$el).append new app.Views.TodoItemView(model: model).render().el
+                $(".todolist ul", that.$el).prepend new app.Views.TodoItemView(model: model).render().el
     deleteTodo: (event) ->
       event.preventDefault()
       todo = @collection.get $(event.target).closest("li").data("item-id")
       todo.destroy()
+    loadMoreTodos: (event) ->
+      event.preventDefault()
+      that = @
+      @collection.fetch
+        add: true
+        remove: false
+        data: $.param({page: @collection.page}) 
+        success: (collection, response, options) ->
+          collection.page += 1
+          that.render()

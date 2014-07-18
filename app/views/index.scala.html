@@ -1,17 +1,17 @@
 @(message: String, todos: List[Todo], todoForm: Form[Todo])
 
-@main("Kittybow") {
+@main("Kittybot") {
 
   <h1>Kittybot</h1>
 
   <div class="todos">
 
-    <div class="todolist"></div>
-
     @helper.form(action = routes.TodoController.createTodo, 'class -> "todoform") {
       @helper.inputText(todoForm("content"), '_label -> "", 'placeholder -> "What are you thinking?")
       <input type="submit" value=">">
     }
+
+    <div class="todolist"></div>
 
   </div>
 
