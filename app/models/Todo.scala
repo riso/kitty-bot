@@ -35,8 +35,9 @@ object Todos {
     todos.filter(_.id === id).firstOption
   }
 
-  def all(offset: Int = 0, pageSize: Int = 10)(implicit s:Session): List[Todo] = {
-    todos.sorted(_.id.reverse).drop(offset).take(pageSize).list
+  def all(offset: Long = 0, pageSize: Int = 10)(implicit s:Session): List[Todo] = {
+	val filtered = if (offset > 0) todos.filter(_.id < offset) else todos
+    filtered.sorted(_.id.reverse).take(pageSize).list
   }
 
   def count(implicit s:Session): Int = {

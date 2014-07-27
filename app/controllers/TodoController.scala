@@ -24,8 +24,8 @@ object TodoController extends Controller {
     )(Todo.apply)(Todo.unapply)
   )
 
-  def index(page: Int) = DBAction { implicit rs =>
-    Ok(Json.toJson(Todos.all(offset = 10 * page)))
+  def index(offset: Int) = DBAction { implicit rs =>
+    Ok(Json.toJson(Todos.all(offset)))
   }
 
   def chatFeed() = Action {

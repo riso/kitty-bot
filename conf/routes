@@ -6,7 +6,7 @@
 GET     /                           controllers.Application.index
 
 # Todos
-GET     /todos           			controllers.TodoController.index(page:Int ?= 0)
+GET     /todos           			controllers.TodoController.index(offset:Int ?= 0)
 GET     /todos/:id                  controllers.TodoController.todoList(id:Long)
 PUT     /todos/:id                  controllers.TodoController.updateTodo(id:Long)
 POST    /todos                      controllers.TodoController.createTodo

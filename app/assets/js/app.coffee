@@ -4,7 +4,6 @@ define ["jquery", "underscore", "angular", "services"], ($, _, angular) ->
   module = angular.module "app", ["kittybotServices", "infinite-scroll"]
 
   module.controller 'TodoController', ['$scope', 'Todo', 'Answer', ($scope, Todo, Answer) ->
-    $scope.page = 0
     $scope.todos = []
     $scope.addTodo = ->
       return if $.trim($scope.todoText) is ""
@@ -21,9 +20,12 @@ define ["jquery", "underscore", "angular", "services"], ($, _, angular) ->
       todo.$delete()
 
     $scope.loadMoreTodos = ->
-      Todo.all {page: $scope.page}, (value, responseHeaders) ->
-        $scope.todos.push value...
-        $scope.page += 1
+      last = _.min $scope.todos, (t) -> t.id
+      Todo.all {offset: last.id}, (value, responseHeaders) ->
+        todoIds = _.pluck $scope.todos, 'id'
+        returnedIds = _.pluck value, 'id'
+        differentIds = _.difference returnedIds, todoIds
+        $scope.todos.push (_.filter value, (t) -> _.contains differentIds, t.id)...
 
     $scope.addMsg = (message) ->
       $scope.$apply ->
