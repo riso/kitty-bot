@@ -4,17 +4,20 @@
 
   <h1>Kittybot</h1>
 
-  <div class="todos">
+  <div ng-controller="TodoController" infinite-scroll="loadMoreTodos()" class="todos">
 
-    @helper.form(action = routes.TodoController.createTodo, 'class -> "todoform") {
-      @helper.inputText(todoForm("content"), '_label -> "", 'placeholder -> "What are you thinking?")
+    <form class="todoform" ng-submit="addTodo()">
+      <input type="text" ng-model="todoText" size="30" placeholder="What are you thinking?">
       <input type="submit" value=">">
-    }
+    </form>
 
-    <div class="todolist"></div>
+    <ul class="unstyled">
+      <li ng-repeat="todo in todos | orderBy:'id':true">
+      <span class="edit" ng-bind-html="todo.content | unsafe"></span> <a href="" ng-click="deleteTodo(todo)" class="delete">X</a>
+      </li>
+    </ul>
 
   </div>
 
 
 }
-<div class="NyanCat NyanSize"></div>

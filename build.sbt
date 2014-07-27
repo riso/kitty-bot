@@ -12,6 +12,8 @@ libraryDependencies ++= Seq(
   "org.webjars" % "requirejs" % "2.1.14-1",
   "org.webjars" % "backbonejs" % "1.1.2-2",
   "org.webjars" % "underscorejs" % "1.6.0-3",
+  "org.webjars" % "angularjs" % "1.2.20",
+  "org.webjars" % "ngInfiniteScroll" % "1.1.2",
   "com.typesafe.play" %% "play-slick" % "0.8.0-M1",
   "org.seleniumhq.selenium" % "selenium-firefox-driver" % "2.34.0",
   "postgresql" % "postgresql" % "9.1-901-1.jdbc4"

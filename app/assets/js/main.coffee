@@ -1,8 +1,13 @@
+'use strict'
+
 require.config
   paths:
     jquery: "../lib/jquery/jquery"
     backbone: "../lib/backbonejs/backbone"
     underscore: "../lib/underscorejs/underscore"
+    angular: "../lib/angularjs/angular"
+    "angular-resource" : "../lib/angularjs/angular-resource"
+    "ng-infinite-scroll": "../lib/ngInfiniteScroll/ng-infinite-scroll"
   shim:
     backbone:
       deps: ["underscore", "jquery"]
@@ -11,10 +16,13 @@ require.config
       exports: "_"
     jquery:
       exports: "$"
+    angular:
+      deps: ["jquery"]
+      exports: "angular"
+    "angular-resource":
+      deps: ["angular"]
+    "ng-infinite-scroll":
+      deps: ["angular", "jquery"]
 
-require ["app", "router", "jquery", "backbone", "underscore"], (app, Router, $, Backbone, _) ->
-
-  app.router = new Router()
-  Backbone.history.start
-    pushState: true
-    root: "/"
+require ["angular", "angular-resource", "ng-infinite-scroll", "./app", "jquery", "underscore"], (angular) ->
+  angular.bootstrap document, ["app"]

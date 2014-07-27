@@ -1,4 +1,5 @@
-define ["jquery"], ($) ->
+define ["jquery", "angular", "services"], ($, angular) ->
+  'use strict'
 
   # From the zentasks application
   $.fn.editInPlace = (method, options...) ->
@@ -40,9 +41,35 @@ define ["jquery"], ($) ->
       else
         $.error("Method " + method + " does not exist.")
 
-  app = {
-    Models: {}
-    Collections: {}
-    Controllers: {}
-    Views: {}
-  }
+  module = angular.module "app", ["kittybotServices", "infinite-scroll"]
+
+  module.controller 'TodoController', ['$scope', 'Todo', 'Answer', ($scope, Todo, Answer) ->
+    $scope.page = 0
+    $scope.todos = []
+    $scope.addTodo = ->
+      return if $.trim($scope.todoText) is ""
+      todo = new Todo {content: "You say: #{$scope.todoText}"}
+      todo.$save [], (value, responseHeaders) ->
+        $scope.todos.push todo
+        answer = Answer.get [], (value, responseHeaders) ->
+          todo = new Todo {content: "Kittybot says: #{value.content}"}
+          todo.$save [], (value, responseHeaders) ->
+            $scope.todos.push todo
+      $scope.todoText = ''
+
+    $scope.deleteTodo = (todo) ->
+      todo.$delete()
+
+    $scope.loadMoreTodos = ->
+      Todo.all {page: $scope.page}, (value, responseHeaders) ->
+        $scope.todos.push value...
+        $scope.page += 1
+
+    ]
+
+  module.filter 'unsafe', ['$sce', ($sce) ->
+    (val) ->
+      $sce.trustAsHtml(val)
+    ]
+
+  module
