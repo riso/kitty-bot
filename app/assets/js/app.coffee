@@ -1,45 +1,5 @@
-define ["jquery", "angular", "services"], ($, angular) ->
+define ["jquery", "underscore", "angular", "services"], ($, _, angular) ->
   'use strict'
-
-  # From the zentasks application
-  $.fn.editInPlace = (method, options...) ->
-    this.each ->
-      methods =
-        init: (options) ->
-          valid = (e) =>
-            newValue = @input.val()
-            options.onChange.call(options.context, newValue)
-          cancel = (e) =>
-            @el.show()
-            @input.hide()
-          @el = $(this).dblclick(methods.edit)
-          @input = $("<input type='text' />")
-            .insertBefore(@el)
-            .keyup (e) ->
-              switch(e.keyCode)
-                # Enter key
-                when 13 then $(this).blur()
-                # Escape key
-                when 27 then cancel(e)
-            .blur(valid)
-            .hide()
-        edit: ->
-          @input
-            .val(@el.text())
-            .show()
-            .focus()
-            .select()
-          @el.hide()
-        close: (newName) ->
-          @el.text(newName).show()
-          @input.hide()
-      # jQuery approach: http://docs.jquery.com/Plugins/Authoring
-      if ( methods[method] )
-        return methods[ method ].apply(this, options)
-      else if (typeof method == 'object')
-        return methods.init.call(this, method)
-      else
-        $.error("Method " + method + " does not exist.")
 
   module = angular.module "app", ["kittybotServices", "infinite-scroll"]
 
@@ -50,11 +10,11 @@ define ["jquery", "angular", "services"], ($, angular) ->
       return if $.trim($scope.todoText) is ""
       todo = new Todo {content: "You say: #{$scope.todoText}"}
       todo.$save [], (value, responseHeaders) ->
-        $scope.todos.push todo
-        answer = Answer.get [], (value, responseHeaders) ->
-          todo = new Todo {content: "Kittybot says: #{value.content}"}
-          todo.$save [], (value, responseHeaders) ->
-            $scope.todos.push todo
+        todo = new Todo {content: "Kittybot says: writing..."}
+        todo.$save [], (value, responseHeaders) ->
+          answer = Answer.get [], (value, responseHeaders) ->
+            todo.content = "Kittybot says: #{value.content}"
+            Todo.update {id: todo.id}, todo
       $scope.todoText = ''
 
     $scope.deleteTodo = (todo) ->
@@ -64,6 +24,18 @@ define ["jquery", "angular", "services"], ($, angular) ->
       Todo.all {page: $scope.page}, (value, responseHeaders) ->
         $scope.todos.push value...
         $scope.page += 1
+
+    $scope.addMsg = (message) ->
+      $scope.$apply ->
+        todo = JSON.parse message.data
+        $scope.todos = _.reject($scope.todos, (t) -> t.id == todo.id)
+        $scope.todos.push todo
+
+    $scope.listen = ->
+      $scope.chatFeed = new EventSource "/chatfeed"
+      $scope.chatFeed.addEventListener "message", $scope.addMsg, false
+
+    $scope.listen()
 
     ]
 

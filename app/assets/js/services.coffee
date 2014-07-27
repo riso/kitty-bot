@@ -4,6 +4,7 @@ define ["angular"], (angular) ->
   kittybotServices.factory "Todo", ["$resource", ($resource) ->
       $resource 'todos/:id', {id: '@id'}, {
         all: {method: 'GET', params:{id:""}, isArray: true}
+        update: {method: 'PUT'}
       }
     ]
 

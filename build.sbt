@@ -10,7 +10,6 @@ libraryDependencies ++= Seq(
   ws,
   "org.webjars" % "jquery" % "2.1.1",
   "org.webjars" % "requirejs" % "2.1.14-1",
-  "org.webjars" % "backbonejs" % "1.1.2-2",
   "org.webjars" % "underscorejs" % "1.6.0-3",
   "org.webjars" % "angularjs" % "1.2.20",
   "org.webjars" % "ngInfiniteScroll" % "1.1.2",

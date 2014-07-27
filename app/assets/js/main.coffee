@@ -3,15 +3,11 @@
 require.config
   paths:
     jquery: "../lib/jquery/jquery"
-    backbone: "../lib/backbonejs/backbone"
     underscore: "../lib/underscorejs/underscore"
     angular: "../lib/angularjs/angular"
     "angular-resource" : "../lib/angularjs/angular-resource"
     "ng-infinite-scroll": "../lib/ngInfiniteScroll/ng-infinite-scroll"
   shim:
-    backbone:
-      deps: ["underscore", "jquery"]
-      exports: "Backbone"
     underscore:
       exports: "_"
     jquery:
